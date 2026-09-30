@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 <title>Control de Medios</title>
 </head>
 <body>
@@ -34,11 +34,18 @@
   <div id="list"></div>
   <div class="card">
     <button id="exportBtn" class="secondary">Exportar CSV</button>
-    <button id="backupBtn" class="secondary">Copia de seguridad</button>
+    <button id="backupBtn" class="secondary">Copia de seguridad</button><button id="passwordBtn" class="secondary">Cambiar contraseña</button>
     <button id="logoutBtn" class="danger">Cerrar sesión</button>
   </div>
 </section>
-<dialog id="moveDialog"><form id="moveForm"><h2>Mover equipo</h2><input type="hidden" id="moveId"><p id="moveInfo" class="hint"></p><label>Nueva ubicación<input id="newLocation" required></label><label>Responsable<input id="movePerson"></label><label>Observación<textarea id="moveNote" rows="3"></textarea></label><div class="dialogActions"><button type="button" id="cancelMove" class="secondary">Cancelar</button><button type="submit">Mover</button></div></form></dialog><dialog id="qrDialog"><div class="qrBox"><h2 id="qrTitle">Código QR</h2><p id="qrText" class="hint"></p><canvas id="qrCanvas"></canvas><div class="dialogActions"><button id="downloadQR" class="secondary">Guardar QR</button><button id="closeQR">Cerrar</button></div></div></dialog></main>
+<dialog id="moveDialog"><form id="moveForm"><h2>Mover equipo</h2><input type="hidden" id="moveId"><p id="moveInfo" class="hint"></p><label>Nueva ubicación<input id="newLocation" required></label><label>Responsable<input id="movePerson"></label><label>Observación<textarea id="moveNote" rows="3"></textarea></label><div class="dialogActions"><button type="button" id="cancelMove" class="secondary">Cancelar</button><button type="submit">Mover</button></div></form></dialog><dialog id="qrDialog"><div class="qrBox"><h2 id="qrTitle">Código QR</h2><p id="qrText" class="hint"></p><canvas id="qrCanvas"></canvas><div class="dialogActions"><button id="downloadQR" class="secondary">Guardar QR</button><button id="closeQR">Cerrar</button></div></div></dialog><dialog id="passwordDialog"><form id="passwordForm">
+<h2>Cambiar contraseña</h2>
+<label>Contraseña actual<input id="currentPassword" type="password" required autocomplete="current-password"></label>
+<label>Nueva contraseña<input id="newPassword" type="password" required minlength="6" autocomplete="new-password"></label>
+<label>Repetir nueva contraseña<input id="repeatPassword" type="password" required minlength="6" autocomplete="new-password"></label>
+<p class="hint">La nueva contraseña debe tener al menos 6 caracteres.</p>
+<div class="dialogActions"><button type="button" id="cancelPassword" class="secondary">Cancelar</button><button type="submit">Guardar</button></div>
+</form></dialog></main>
 
 <dialog id="equipmentDialog">
 <form id="equipmentForm">
@@ -58,6 +65,6 @@
 </form>
 </dialog>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script><script src="app.js?v=3"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script><script src="app.js?v=4"></script>
 </body>
 </html>

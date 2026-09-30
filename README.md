@@ -1,3 +1,3 @@
-# Control de Medios v3
-Incluye movimientos de ubicación y QR por equipo.
-Usuario: admin / Contraseña: admin123
+# Control de Medios v4
+Incluye inventario, movimientos, QR, préstamos/devoluciones y cambio de contraseña.
+Usuario inicial: admin / Contraseña inicial: admin123

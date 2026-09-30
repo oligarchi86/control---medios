@@ -1,5 +1,5 @@
 "use strict";
-const KEY="control_medios_pwa_v3";
+const KEY="control_medios_pwa_v4";
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){db=null}
 if(!db) db={equipment:[],movements:[],users:[{u:"admin",p:"admin123"}]};
@@ -33,6 +33,20 @@ $("moveForm").onsubmit=e=>{e.preventDefault();const id=$("moveId").value,x=db.eq
 function showQR(id){const e=db.equipment.find(x=>x.id===id);$("qrTitle").textContent="QR — "+e.name;$("qrText").textContent="Inventario: "+e.inventory+" | Serie: "+e.serial;if(window.QRCode){QRCode.toCanvas($("qrCanvas"),"CONTROL-MEDIOS|ID:"+e.id+"|INV:"+e.inventory+"|SERIE:"+e.serial,{width:260,margin:2},()=>{});$("qrDialog").showModal()}else alert("No se pudo cargar el generador QR. Comprueba la conexión a Internet.")}
 $("closeQR").onclick=()=>$("qrDialog").close();
 $("downloadQR").onclick=()=>{const a=document.createElement("a");a.href=$("qrCanvas").toDataURL("image/png");a.download="QR_"+Date.now()+".png";a.click()};
+
+function openPasswordDialog(){ $("currentPassword").value=""; $("newPassword").value=""; $("repeatPassword").value=""; $("passwordDialog").showModal(); }
+$("passwordBtn").onclick=openPasswordDialog;
+$("cancelPassword").onclick=()=>$("passwordDialog").close();
+$("passwordForm").onsubmit=e=>{
+  e.preventDefault();
+  const cur=$("currentPassword").value, np=$("newPassword").value, rp=$("repeatPassword").value;
+  const user=sessionStorage.getItem("cm_user")||"admin";
+  const account=db.users.find(x=>x.u===user);
+  if(!account || account.p!==cur){alert("La contraseña actual no es correcta.");return}
+  if(np.length<6){alert("La nueva contraseña debe tener al menos 6 caracteres.");return}
+  if(np!==rp){alert("Las nuevas contraseñas no coinciden.");return}
+  account.p=np; saveDB(); $("passwordDialog").close(); alert("Contraseña cambiada correctamente.");
+};
 updateView();}
  else alert("Usuario o contraseña incorrectos");
 });
@@ -43,6 +57,20 @@ $("moveForm").onsubmit=e=>{e.preventDefault();const id=$("moveId").value,x=db.eq
 function showQR(id){const e=db.equipment.find(x=>x.id===id);$("qrTitle").textContent="QR — "+e.name;$("qrText").textContent="Inventario: "+e.inventory+" | Serie: "+e.serial;if(window.QRCode){QRCode.toCanvas($("qrCanvas"),"CONTROL-MEDIOS|ID:"+e.id+"|INV:"+e.inventory+"|SERIE:"+e.serial,{width:260,margin:2},()=>{});$("qrDialog").showModal()}else alert("No se pudo cargar el generador QR. Comprueba la conexión a Internet.")}
 $("closeQR").onclick=()=>$("qrDialog").close();
 $("downloadQR").onclick=()=>{const a=document.createElement("a");a.href=$("qrCanvas").toDataURL("image/png");a.download="QR_"+Date.now()+".png";a.click()};
+
+function openPasswordDialog(){ $("currentPassword").value=""; $("newPassword").value=""; $("repeatPassword").value=""; $("passwordDialog").showModal(); }
+$("passwordBtn").onclick=openPasswordDialog;
+$("cancelPassword").onclick=()=>$("passwordDialog").close();
+$("passwordForm").onsubmit=e=>{
+  e.preventDefault();
+  const cur=$("currentPassword").value, np=$("newPassword").value, rp=$("repeatPassword").value;
+  const user=sessionStorage.getItem("cm_user")||"admin";
+  const account=db.users.find(x=>x.u===user);
+  if(!account || account.p!==cur){alert("La contraseña actual no es correcta.");return}
+  if(np.length<6){alert("La nueva contraseña debe tener al menos 6 caracteres.");return}
+  if(np!==rp){alert("Las nuevas contraseñas no coinciden.");return}
+  account.p=np; saveDB(); $("passwordDialog").close(); alert("Contraseña cambiada correctamente.");
+};
 updateView();});
 $("search").addEventListener("input",render);
 $("newBtn").addEventListener("click",()=>openEquipment());
@@ -80,4 +108,18 @@ $("moveForm").onsubmit=e=>{e.preventDefault();const id=$("moveId").value,x=db.eq
 function showQR(id){const e=db.equipment.find(x=>x.id===id);$("qrTitle").textContent="QR — "+e.name;$("qrText").textContent="Inventario: "+e.inventory+" | Serie: "+e.serial;if(window.QRCode){QRCode.toCanvas($("qrCanvas"),"CONTROL-MEDIOS|ID:"+e.id+"|INV:"+e.inventory+"|SERIE:"+e.serial,{width:260,margin:2},()=>{});$("qrDialog").showModal()}else alert("No se pudo cargar el generador QR. Comprueba la conexión a Internet.")}
 $("closeQR").onclick=()=>$("qrDialog").close();
 $("downloadQR").onclick=()=>{const a=document.createElement("a");a.href=$("qrCanvas").toDataURL("image/png");a.download="QR_"+Date.now()+".png";a.click()};
+
+function openPasswordDialog(){ $("currentPassword").value=""; $("newPassword").value=""; $("repeatPassword").value=""; $("passwordDialog").showModal(); }
+$("passwordBtn").onclick=openPasswordDialog;
+$("cancelPassword").onclick=()=>$("passwordDialog").close();
+$("passwordForm").onsubmit=e=>{
+  e.preventDefault();
+  const cur=$("currentPassword").value, np=$("newPassword").value, rp=$("repeatPassword").value;
+  const user=sessionStorage.getItem("cm_user")||"admin";
+  const account=db.users.find(x=>x.u===user);
+  if(!account || account.p!==cur){alert("La contraseña actual no es correcta.");return}
+  if(np.length<6){alert("La nueva contraseña debe tener al menos 6 caracteres.");return}
+  if(np!==rp){alert("Las nuevas contraseñas no coinciden.");return}
+  account.p=np; saveDB(); $("passwordDialog").close(); alert("Contraseña cambiada correctamente.");
+};
 updateView();
