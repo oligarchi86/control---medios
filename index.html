@@ -5,60 +5,47 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=3">
 <title>Control de Medios</title>
 </head>
 <body>
 <header>
   <div><h1>Control de Medios</h1><small>Inventario y movimientos</small></div>
-  <button id="installBtn" class="secondary" hidden>Instalar</button>
 </header>
-
 <main>
 <section id="loginView" class="card">
   <h2>Acceso</h2>
-  <input id="loginUser" placeholder="Usuario" autocomplete="username">
-  <input id="loginPass" type="password" placeholder="Contraseña" autocomplete="current-password">
+  <input id="loginUser" placeholder="Usuario">
+  <input id="loginPass" type="password" placeholder="Contraseña">
   <button id="loginBtn">Entrar</button>
-  <p class="hint">Demo inicial: <b>admin</b> / <b>admin123</b></p>
+  <p class="hint">Usuario inicial: <b>admin</b> / <b>admin123</b></p>
 </section>
 
-<section id="appView" hidden>
+<section id="appView" class="hidden">
   <div class="stats">
     <div><b id="countTotal">0</b><span>Equipos</span></div>
     <div><b id="countAvailable">0</b><span>Disponibles</span></div>
     <div><b id="countLoaned">0</b><span>Prestados</span></div>
   </div>
-
   <div class="toolbar">
-    <input id="search" placeholder="Buscar nombre, marca, modelo o serie…">
-    <button id="newBtn">＋ Equipo</button>
-    <button id="scanBtn" class="secondary">▣ Escanear QR</button>
+    <input id="search" placeholder="Buscar equipo...">
+    <button id="newBtn">+ Equipo</button>
   </div>
-
-  <div id="scanner" class="card" hidden>
-    <video id="video" autoplay playsinline></video>
-    <button id="stopScan" class="secondary">Cerrar cámara</button>
-    <p id="scanMsg" class="hint">Apunta al código QR.</p>
-  </div>
-
   <div id="list"></div>
-
   <div class="card">
-    <h3>Herramientas</h3>
     <button id="exportBtn" class="secondary">Exportar CSV</button>
     <button id="backupBtn" class="secondary">Copia de seguridad</button>
     <button id="logoutBtn" class="danger">Cerrar sesión</button>
   </div>
 </section>
-</main>
+<dialog id="moveDialog"><form id="moveForm"><h2>Mover equipo</h2><input type="hidden" id="moveId"><p id="moveInfo" class="hint"></p><label>Nueva ubicación<input id="newLocation" required></label><label>Responsable<input id="movePerson"></label><label>Observación<textarea id="moveNote" rows="3"></textarea></label><div class="dialogActions"><button type="button" id="cancelMove" class="secondary">Cancelar</button><button type="submit">Mover</button></div></form></dialog><dialog id="qrDialog"><div class="qrBox"><h2 id="qrTitle">Código QR</h2><p id="qrText" class="hint"></p><canvas id="qrCanvas"></canvas><div class="dialogActions"><button id="downloadQR" class="secondary">Guardar QR</button><button id="closeQR">Cerrar</button></div></div></dialog></main>
 
 <dialog id="equipmentDialog">
-<form method="dialog" id="equipmentForm">
+<form id="equipmentForm">
 <h2 id="dialogTitle">Nuevo equipo</h2>
 <input type="hidden" id="equipmentId">
 <label>Nombre<input id="name" required></label>
-<label>Equipo / categoría<input id="category"></label>
+<label>Categoría<input id="category"></label>
 <label>Modelo<input id="model"></label>
 <label>Marca<input id="brand"></label>
 <label>Número de serie<input id="serial"></label>
@@ -67,21 +54,10 @@
 <label>Estado<select id="status"><option>Disponible</option><option>Prestado</option><option>En mantenimiento</option><option>Baja</option></select></label>
 <label>Foto<input id="photo" type="file" accept="image/*" capture="environment"></label>
 <div id="photoPreview"></div>
-<div class="dialogActions"><button value="cancel" class="secondary">Cancelar</button><button id="saveBtn" value="default">Guardar</button></div>
+<div class="dialogActions"><button type="button" id="cancelEquipment" class="secondary">Cancelar</button><button type="submit">Guardar</button></div>
 </form>
 </dialog>
 
-<dialog id="loanDialog">
-<form method="dialog" id="loanForm">
-<h2>Préstamo / devolución</h2>
-<input type="hidden" id="loanId">
-<label>Responsable<input id="loanPerson" required></label>
-<label>Destino / proyecto<input id="loanDestination"></label>
-<label>Fecha de devolución<input id="loanDue" type="date"></label>
-<div class="dialogActions"><button value="cancel" class="secondary">Cancelar</button><button id="loanSave" value="default">Registrar</button></div>
-</form>
-</dialog>
-
-<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script><script src="app.js?v=3"></script>
 </body>
 </html>
