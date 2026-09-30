@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 <title>Control de Medios</title>
 </head>
 <body>
@@ -15,56 +15,131 @@
 <main>
 <section id="loginView" class="card">
   <h2>Acceso</h2>
-  <input id="loginUser" placeholder="Usuario">
-  <input id="loginPass" type="password" placeholder="Contraseña">
+  <input id="loginUser" placeholder="Usuario" autocomplete="username">
+  <input id="loginPass" type="password" placeholder="Contraseña" autocomplete="current-password">
   <button id="loginBtn">Entrar</button>
   <p class="hint">Usuario inicial: <b>admin</b> / <b>admin123</b></p>
 </section>
 
 <section id="appView" class="hidden">
+  <div class="userbar"><span>Sesión: <b id="currentUserLabel"></b></span><span id="roleLabel" class="badge"></span></div>
   <div class="stats">
     <div><b id="countTotal">0</b><span>Equipos</span></div>
     <div><b id="countAvailable">0</b><span>Disponibles</span></div>
     <div><b id="countLoaned">0</b><span>Prestados</span></div>
+    <div><b id="countMaintenance">0</b><span>Mantenimiento</span></div>
   </div>
   <div class="toolbar">
-    <input id="search" placeholder="Buscar equipo...">
+    <input id="search" placeholder="Buscar nombre, marca, modelo, serie o inventario...">
     <button id="newBtn">+ Equipo</button>
   </div>
+  <div class="filters">
+    <select id="statusFilter"><option value="">Todos los estados</option><option>Disponible</option><option>Prestado</option><option>En mantenimiento</option><option>Baja</option></select>
+    <select id="locationFilter"><option value="">Todas las ubicaciones</option></select>
+  </div>
   <div id="list"></div>
-  <div class="card">
-    <button id="exportBtn" class="secondary">Exportar CSV</button>
-    <button id="backupBtn" class="secondary">Copia de seguridad</button><button id="passwordBtn" class="secondary">Cambiar contraseña</button>
+
+  <div class="card tools">
+    <h2>Herramientas</h2>
+    <button id="locationsBtn" class="secondary">📍 Ubicaciones</button>
+    <button id="usersBtn" class="secondary adminOnly">👥 Usuarios y permisos</button>
+    <button id="historyBtn" class="secondary">📋 Historial y auditoría</button>
+    <button id="exportBtn" class="secondary">📊 Exportar inventario CSV</button>
+    <button id="exportHistoryBtn" class="secondary">📊 Exportar historial CSV</button>
+    <button id="backupBtn" class="secondary">💾 Copia de seguridad</button>
+    <button id="importBtn" class="secondary adminOnly">♻️ Restaurar copia</button>
+    <input id="importFile" type="file" accept="application/json" hidden>
+    <button id="passwordBtn" class="secondary">🔐 Cambiar contraseña</button>
     <button id="logoutBtn" class="danger">Cerrar sesión</button>
   </div>
 </section>
-<dialog id="moveDialog"><form id="moveForm"><h2>Mover equipo</h2><input type="hidden" id="moveId"><p id="moveInfo" class="hint"></p><label>Nueva ubicación<input id="newLocation" required></label><label>Responsable<input id="movePerson"></label><label>Observación<textarea id="moveNote" rows="3"></textarea></label><div class="dialogActions"><button type="button" id="cancelMove" class="secondary">Cancelar</button><button type="submit">Mover</button></div></form></dialog><dialog id="qrDialog"><div class="qrBox"><h2 id="qrTitle">Código QR</h2><p id="qrText" class="hint"></p><canvas id="qrCanvas"></canvas><div class="dialogActions"><button id="downloadQR" class="secondary">Guardar QR</button><button id="closeQR">Cerrar</button></div></div></dialog><dialog id="passwordDialog"><form id="passwordForm">
-<h2>Cambiar contraseña</h2>
-<label>Contraseña actual<input id="currentPassword" type="password" required></label>
-<label>Nueva contraseña<input id="newPassword" type="password" required minlength="6"></label>
-<label>Repetir nueva contraseña<input id="repeatPassword" type="password" required minlength="6"></label>
-<p class="hint">Mínimo 6 caracteres.</p>
-<div class="dialogActions"><button type="button" id="cancelPassword" class="secondary">Cancelar</button><button type="submit">Guardar</button></div>
-</form></dialog></main>
 
-<dialog id="equipmentDialog">
-<form id="equipmentForm">
+<!-- EQUIPO -->
+<dialog id="equipmentDialog"><form id="equipmentForm">
 <h2 id="dialogTitle">Nuevo equipo</h2>
 <input type="hidden" id="equipmentId">
 <label>Nombre<input id="name" required></label>
-<label>Categoría<input id="category"></label>
+<label>Equipo / categoría<input id="category"></label>
 <label>Modelo<input id="model"></label>
 <label>Marca<input id="brand"></label>
 <label>Número de serie<input id="serial"></label>
 <label>Inventario / código<input id="inventory"></label>
-<label>Ubicación<input id="location" value="Almacén"></label>
+<label>Ubicación<select id="location"></select></label>
 <label>Estado<select id="status"><option>Disponible</option><option>Prestado</option><option>En mantenimiento</option><option>Baja</option></select></label>
 <label>Foto<input id="photo" type="file" accept="image/*" capture="environment"></label>
 <div id="photoPreview"></div>
 <div class="dialogActions"><button type="button" id="cancelEquipment" class="secondary">Cancelar</button><button type="submit">Guardar</button></div>
-</form>
-</dialog>
+</form></dialog>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script><script src="app.js?v=4"></script>
+<!-- MOVIMIENTO -->
+<dialog id="moveDialog"><form id="moveForm">
+<h2>Mover equipo</h2><input type="hidden" id="moveId"><p id="moveInfo" class="hint"></p>
+<label>Nueva ubicación<select id="newLocation"></select></label>
+<label>Responsable<input id="movePerson"></label>
+<label>Observación<textarea id="moveNote" rows="3"></textarea></label>
+<div class="dialogActions"><button type="button" id="cancelMove" class="secondary">Cancelar</button><button type="submit">Mover</button></div>
+</form></dialog>
+
+<!-- PRESTAMO -->
+<dialog id="loanDialog"><form id="loanForm">
+<h2>Prestar equipo</h2><input type="hidden" id="loanId">
+<p id="loanInfo" class="hint"></p>
+<label>Persona / responsable<input id="borrower" required></label>
+<label>Destino<input id="destination"></label>
+<label>Fecha de devolución prevista<input id="dueDate" type="date"></label>
+<label>Observación<textarea id="loanNote" rows="3"></textarea></label>
+<div class="dialogActions"><button type="button" id="cancelLoan" class="secondary">Cancelar</button><button type="submit">Registrar préstamo</button></div>
+</form></dialog>
+
+<!-- DEVOLUCION -->
+<dialog id="returnDialog"><form id="returnForm">
+<h2>Devolver equipo</h2><input type="hidden" id="returnId"><p id="returnInfo" class="hint"></p>
+<label>Ubicación de regreso<select id="returnLocation"></select></label>
+<label>Observación<textarea id="returnNote" rows="3"></textarea></label>
+<div class="dialogActions"><button type="button" id="cancelReturn" class="secondary">Cancelar</button><button type="submit">Registrar devolución</button></div>
+</form></dialog>
+
+<!-- QR -->
+<dialog id="qrDialog"><div class="qrBox"><h2 id="qrTitle">Código QR</h2><p id="qrText" class="hint"></p><canvas id="qrCanvas"></canvas><div class="dialogActions"><button id="downloadQR" class="secondary">Guardar QR</button><button id="closeQR">Cerrar</button></div></div></dialog>
+
+<!-- PASSWORD -->
+<dialog id="passwordDialog"><form id="passwordForm">
+<h2>Cambiar contraseña</h2>
+<label>Contraseña actual<input id="currentPassword" type="password" required autocomplete="current-password"></label>
+<label>Nueva contraseña<input id="newPassword" type="password" required minlength="6" autocomplete="new-password"></label>
+<label>Repetir nueva contraseña<input id="repeatPassword" type="password" required minlength="6" autocomplete="new-password"></label>
+<p class="hint">Mínimo 6 caracteres.</p>
+<div class="dialogActions"><button type="button" id="cancelPassword" class="secondary">Cancelar</button><button type="submit">Guardar</button></div>
+</form></dialog>
+
+<!-- USUARIOS -->
+<dialog id="usersDialog"><form id="userForm">
+<h2>Usuarios y permisos</h2>
+<div id="usersList"></div>
+<hr>
+<h3>Nuevo usuario</h3>
+<label>Usuario<input id="newUsername" autocomplete="off"></label>
+<label>Contraseña<input id="newUserPassword" type="password" minlength="6"></label>
+<label>Rol<select id="newUserRole"><option value="operador">Operador</option><option value="consulta">Consulta</option><option value="admin">Administrador</option></select></label>
+<div class="dialogActions"><button type="button" id="closeUsers" class="secondary">Cerrar</button><button type="submit">Crear usuario</button></div>
+</form></dialog>
+
+<!-- UBICACIONES -->
+<dialog id="locationsDialog"><form id="locationsForm">
+<h2>Ubicaciones</h2>
+<div id="locationsList"></div>
+<hr>
+<label>Nueva ubicación<input id="newLocationName"></label>
+<div class="dialogActions"><button type="button" id="closeLocations" class="secondary">Cerrar</button><button type="submit">Agregar</button></div>
+</form></dialog>
+
+<!-- HISTORIAL -->
+<dialog id="historyDialog"><div class="historyBox">
+<h2 id="historyTitle">Historial</h2><div id="historyList"></div>
+<button id="closeHistory" class="secondary">Cerrar</button>
+</div></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
