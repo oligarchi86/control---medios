@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=6">
 <title>Control de Medios</title>
 </head>
 <body>
@@ -66,7 +66,7 @@
 <label>Inventario / código<input id="inventory"></label>
 <label>Ubicación<select id="location"></select></label>
 <label>Estado<select id="status"><option>Disponible</option><option>Prestado</option><option>En mantenimiento</option><option>Baja</option></select></label>
-<label>Foto<input id="photo" type="file" accept="image/*" capture="environment"></label>
+<label>Foto (máximo 20 MB)<input id="photo" type="file" accept="image/*" capture="environment"></label>
 <div id="photoPreview"></div>
 <div class="dialogActions"><button type="button" id="cancelEquipment" class="secondary">Cancelar</button><button type="submit">Guardar</button></div>
 </form></dialog>
@@ -140,6 +140,6 @@
 </div></dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

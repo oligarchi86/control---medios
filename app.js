@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY="control_medios_pwa_v5";
+const KEY="control_medios_pwa_v6";
 const OLD_KEYS=["control_medios_pwa_v4","control_medios_pwa_v3"];
 const DEFAULT_LOCATIONS=["Almacén","Estudio 1","Estudio 2","Control","Oficina"];
 
@@ -133,11 +133,52 @@ $("newBtn").onclick=()=>{if(canEdit())openEquipment();else alert("Tu usuario no 
 $("cancelEquipment").onclick=()=>$("equipmentDialog").close();
 
 let pendingPhoto="";
-$("photo").onchange=()=>{
+$("photo").onchange=async()=>{
  const f=$("photo").files[0]; if(!f)return;
- if(f.size>4*1024*1024){alert("La foto es demasiado grande. Máximo 4 MB.");$("photo").value="";return}
- const r=new FileReader();r.onload=()=>{pendingPhoto=r.result;$("photoPreview").innerHTML=`<img class="preview" src="${pendingPhoto}" alt="">`};r.readAsDataURL(f);
+ const MAX_UPLOAD=20*1024*1024;
+ if(f.size>MAX_UPLOAD){
+   alert("La foto es demasiado grande. Máximo permitido: 20 MB.");
+   $("photo").value="";return;
+ }
+ try{
+   pendingPhoto=await preparePhoto(f);
+   $("photoPreview").innerHTML=`<img class="preview" src="${pendingPhoto}" alt="">`;
+ }catch(err){
+   console.error(err);
+   alert("No se pudo procesar la foto. Prueba con otra imagen.");
+   $("photo").value="";
+ }
 };
+function preparePhoto(file){
+ return new Promise((resolve,reject)=>{
+   const reader=new FileReader();
+   reader.onerror=reject;
+   reader.onload=()=>{
+     const img=new Image();
+     img.onerror=reject;
+     img.onload=()=>{
+       const MAX_SIDE=2000;
+       const scale=Math.min(1,MAX_SIDE/Math.max(img.width,img.height));
+       const w=Math.max(1,Math.round(img.width*scale));
+       const h=Math.max(1,Math.round(img.height*scale));
+       const canvas=document.createElement("canvas");
+       canvas.width=w;canvas.height=h;
+       const ctx=canvas.getContext("2d");
+       ctx.drawImage(img,0,0,w,h);
+       // JPEG keeps the local database small enough for phones while accepting originals up to 20 MB.
+       let quality=.88;
+       let data=canvas.toDataURL("image/jpeg",quality);
+       while(data.length>3.5*1024*1024 && quality>.45){
+         quality-=.08;
+         data=canvas.toDataURL("image/jpeg",quality);
+       }
+       resolve(data);
+     };
+     img.src=reader.result;
+   };
+   reader.readAsDataURL(file);
+ });
+}
 function openEquipment(id){
  $("equipmentForm").reset();pendingPhoto="";
  $("equipmentId").value=id||"";fillLocationFilters();
