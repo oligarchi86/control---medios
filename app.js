@@ -5,7 +5,7 @@ const $=id=>document.getElementById(id);
 const saveDB=()=>localStorage.setItem(KEY,JSON.stringify(db));
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 function logged(){return sessionStorage.getItem("cm_login")==="1"}
-function showApp(){ $("loginView").hidden=true;$("appView").hidden=!logged(); if(logged()) render();}
+function showApp(){ $("loginView").hidden=logged();$("appView").hidden=!logged(); if(logged()) render();}
 $("loginBtn").onclick=()=>{let u=$("loginUser").value.trim(),p=$("loginPass").value;if(db.users.some(x=>x.u===u&&x.p===p)){sessionStorage.setItem("cm_login","1");showApp()}else alert("Usuario o contraseña incorrectos")};
 $("logoutBtn").onclick=()=>{sessionStorage.clear();showApp()};
 $("newBtn").onclick=()=>openEquipment();
