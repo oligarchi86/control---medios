@@ -40,10 +40,10 @@
 </section>
 <dialog id="moveDialog"><form id="moveForm"><h2>Mover equipo</h2><input type="hidden" id="moveId"><p id="moveInfo" class="hint"></p><label>Nueva ubicación<input id="newLocation" required></label><label>Responsable<input id="movePerson"></label><label>Observación<textarea id="moveNote" rows="3"></textarea></label><div class="dialogActions"><button type="button" id="cancelMove" class="secondary">Cancelar</button><button type="submit">Mover</button></div></form></dialog><dialog id="qrDialog"><div class="qrBox"><h2 id="qrTitle">Código QR</h2><p id="qrText" class="hint"></p><canvas id="qrCanvas"></canvas><div class="dialogActions"><button id="downloadQR" class="secondary">Guardar QR</button><button id="closeQR">Cerrar</button></div></div></dialog><dialog id="passwordDialog"><form id="passwordForm">
 <h2>Cambiar contraseña</h2>
-<label>Contraseña actual<input id="currentPassword" type="password" required autocomplete="current-password"></label>
-<label>Nueva contraseña<input id="newPassword" type="password" required minlength="6" autocomplete="new-password"></label>
-<label>Repetir nueva contraseña<input id="repeatPassword" type="password" required minlength="6" autocomplete="new-password"></label>
-<p class="hint">La nueva contraseña debe tener al menos 6 caracteres.</p>
+<label>Contraseña actual<input id="currentPassword" type="password" required></label>
+<label>Nueva contraseña<input id="newPassword" type="password" required minlength="6"></label>
+<label>Repetir nueva contraseña<input id="repeatPassword" type="password" required minlength="6"></label>
+<p class="hint">Mínimo 6 caracteres.</p>
 <div class="dialogActions"><button type="button" id="cancelPassword" class="secondary">Cancelar</button><button type="submit">Guardar</button></div>
 </form></dialog></main>
 
