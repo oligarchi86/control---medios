@@ -22,7 +22,7 @@ function render(){
   $("list").innerHTML=a.length?a.map(card).join(""):'<div class="empty">No hay equipos registrados.</div>';
 }
 function card(e){
- return '<article class="item"><div class="thumb"></div><div><h3>'+esc(e.name)+' <span class="badge">'+esc(e.status)+'</span></h3><div class="meta">'+esc(e.brand)+' '+esc(e.model)+'<br>Serie: '+esc(e.serial)+'<br>Inventario: '+esc(e.inventory)+'<br>Ubicación: '+esc(e.location)+'</div><div class="actions"><button onclick="openEquipment(\''+e.id+'\')">Editar</button><button class="secondary" onclick="openMove('${e.id}')">Mover</button><button class="secondary" onclick="showQR('${e.id}')">QR</button></div></div></article>';
+ return `<article class="item"><div class="thumb"></div><div><h3>${esc(e.name)} <span class="badge">${esc(e.status)}</span></h3><div class="meta">${esc(e.brand)} ${esc(e.model)}<br>Serie: ${esc(e.serial)}<br>Inventario: ${esc(e.inventory)}<br>Ubicación: ${esc(e.location)}</div><div class="actions"><button onclick="openEquipment('${e.id}')">Editar</button><button class="secondary" onclick="openMove('${e.id}')">Mover</button><button class="secondary" onclick="showQR('${e.id}')">QR</button></div></div></article>`;
 }
 function updateView(){
   const isLogged=logged();

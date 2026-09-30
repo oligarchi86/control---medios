@@ -1,3 +1,3 @@
-# Control de Medios v4 corregida
-Cambio de contraseña y migración automática de datos de v3.
+# Control de Medios v4 final
+Versión corregida: inicio de sesión, cambio de contraseña, QR y movimientos.
 Usuario inicial: admin / Contraseña inicial: admin123
